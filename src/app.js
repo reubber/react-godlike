@@ -2,9 +2,9 @@
 
 var React = require('react')
 
-var Title = React.createClass({
+const App = React.createClass({
     render: function () {
-        return <h1>Hello world2</h1>
+        return <div>Aplicação</div>
     }
 })
 
