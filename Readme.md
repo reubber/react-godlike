@@ -42,17 +42,17 @@ Após instalar o babel e seus presets é necessario configurar o dotfile .babelr
 `}` 
 
 tambem é preciso atualiazar o arquivo webpack.config.js pra q ele utilize o babel pra que toda vez q alterar o arquivo js ele utilize o babel para poder copilar e gerar nosso arquivo ecmascript5
-
-`module: {
-loaders: [{`
+~~~
+module: {
+loaders: [{
 
       test: /\.js$/,
       exclude: /node_modules/,
       include: /src/,
       loader: 'babel'
     }]
-  `}`
-
+  }
+~~~
 ## Adicione entrada sourcemaps no `webpack.config.js`
 
 `devtool: "source-map",`
@@ -67,7 +67,7 @@ Os `sourcemaps` são impressionantes. Ou seja, eles são usados ​​para exibi
 
 proximo passo é fazer a atualização do `webpack.config.js` para que ele possa fazer a utilização do nosso `react-hot-loader`
 
-começe mudando o `entry` na config para um array ao inves de somente umas string e passar a seguintes entradas:
+começe mudando o `entry` na config para um array ao inves de somente uma string e passe as seguintes entradas:
 
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:3000',
@@ -90,6 +90,37 @@ e depois adicione o plugin
 
 para que o Babel  também ele consiga entender que a gente está fazendo a atualização de um módulo
 que utiliza o ecscript 6.
+
+Se preferir é possivel criar a entrada start na package.json.
+
+primeiramente crie um arquivo no diretorio raiz do seu projeto e com o nome `server.js` e faça o require do webpack, webpack-server e o seu arquivo de configuração ficando mais ou menos da seguinte forma 
+
+~~~
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const config = require('./webpack.config')
+
+new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    hot: true,
+    historyApiFallback: true,
+    stats: { colors: true }
+}).listen(3000, (err) => {
+    if (err) {
+        return console.log(err)
+    }
+    console.log('listening on http://localhost:3000')
+})
+~~~
+
+Agora crie uma entrada scripts no `package.json` e dentro coloque o start e passe o comando para que o nosso servidor seja executado apenas usando o npm start
+
+~~~
+"scripts": {
+    "start": "node server.js"
+  },
+~~~
+
 
 
 
